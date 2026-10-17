@@ -4,22 +4,22 @@
  * Salvus tokens. Structure from the "Serif" design system; colors sampled from
  * the Salvus logo sheet (burnished gold replaced by the brand's espresso/taupe).
  * Contrast on --background: foreground 10.8:1, muted-foreground 5.2:1,
- * accent-foreground on accent 9.6:1, input border 3:1.
+ * accent-foreground on accent 11.5:1, input border 3:1.
  */
 :root {
   --background: #eeeae1;
   --foreground: #3a2f28;
   --muted: #e0d7ce;
   --muted-foreground: #6b5e52;
-  --accent: #4c3f37;
-  --accent-secondary: #72665a;
+  --accent: #0B3C37;
+  --accent-secondary: #2f6059;
   --accent-foreground: #fbf8f3;
-  --brand-taupe: #837262;
+  --brand-taupe: #0B3C37;
   --border: #d5cbc0;
   --border-hover: #b9ab9d;
   --input: #9c8e80;
   --card: #fbf9f5;
-  --ring: #4c3f37;
+  --ring: #0B3C37;
   --destructive: #9a3b2b;
 }
 
@@ -63,16 +63,16 @@ h3 {
   font-weight: 400;
 }
 
-/* Paper texture: fine noise over the whole page for a print-like feel. */
+/* Grain: neutral monochrome noise, overlay-blended so it textures light and dark surfaces alike. */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 60;
   pointer-events: none;
-  opacity: 0.3;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.23 0 0 0 0 0.18 0 0 0 0 0.16 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Ambient glow: one large, barely-there warm circle behind everything. */

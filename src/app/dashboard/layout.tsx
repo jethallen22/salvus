@@ -41,7 +41,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
       <Sidebar>
         <div className="px-6 pt-6 pb-10">
           <Link href="/dashboard" aria-label="Salvus dashboard" className="inline-flex rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background">
-            <Logo />
+            <Logo horizontal className="w-36" />
           </Link>
         </div>
 

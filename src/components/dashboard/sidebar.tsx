@@ -26,7 +26,7 @@ export function Sidebar({ children }: { children: ReactNode }) {
     <>
       <div className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-border bg-background px-4 lg:hidden">
         <Link href="/dashboard" aria-label="Salvus dashboard" className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background">
-          <Logo />
+          <Logo horizontal className="w-32" />
         </Link>
         <button
           type="button"

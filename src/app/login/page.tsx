@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/auth/login-form";
+import Image from "next/image";
 import { Logo } from "@/components/brand/logo";
-import { Card } from "@/components/ui/card";
-import { SectionLabel } from "@/components/ui/section-label";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Sign in" };
@@ -16,21 +15,42 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   const { error } = await searchParams;
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-4 py-16 animate-fade-in sm:py-24">
-      <Logo variant="stacked" className="mb-12" />
-      <Card accentTop className="p-8 sm:p-10">
-        <SectionLabel>Owner access</SectionLabel>
-        <h1 className="mb-2 text-center text-3xl leading-tight tracking-[-0.01em]">Manage your wallets</h1>
-        <p className="mb-8 text-center text-muted-foreground">
-          Sign in to edit the profile your Salvus wallet shares when it&rsquo;s tapped.
-        </p>
-        <LoginForm
-          initialError={error === "inactive" ? "This account has been deactivated. Contact your administrator." : undefined}
+    <main className="grid w-full flex-1 lg:grid-cols-2">
+      <section className="relative flex flex-col justify-end overflow-hidden bg-accent px-6 pb-10 pt-14 text-accent-foreground sm:px-10 lg:px-16 lg:pb-20 lg:pt-24">
+        {/* Same green as this panel, so it's inverted to white for the faded watermark. */}
+        <Image
+          src="/assets/images/logo-symbol-green.png"
+          alt=""
+          width={1080}
+          height={1080}
+          aria-hidden
+          className="pointer-events-none absolute -bottom-24 -right-24 size-[26rem] max-w-none brightness-0 invert opacity-20 lg:-bottom-40 lg:-right-40 lg:size-[44rem]"
         />
-        <p className="mt-8 border-t border-border pt-6 text-center text-sm text-muted-foreground">
-          Accounts are created by your administrator.
-        </p>
-      </Card>
+        <div className="relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-lg">
+          <p className="small-caps animate-rise mb-4 text-accent-foreground/70 lg:mb-6">Owner access</p>
+          <h1 className="animate-rise text-balance text-4xl leading-[1.1] tracking-[-0.01em] [--i:1] lg:text-6xl">
+            Manage your wallets
+          </h1>
+          <p className="animate-rise mt-4 max-w-[34ch] text-balance text-accent-foreground/80 [--i:2] lg:mt-6 lg:text-lg">
+            Sign in to edit the profile your Salvus wallet shares when it&rsquo;s tapped.
+          </p>
+        </div>
+      </section>
+
+      <section className="flex flex-col justify-center px-6 py-12 sm:px-10 lg:px-16 lg:py-24">
+        <div className="mx-auto w-full max-w-sm">
+          <Logo horizontal className="animate-rise mb-10 hidden lg:flex [--i:3] lg:mb-14 lg:w-52" />
+          <div className="flex justify-center w-full"><Logo className="animate-rise mb-6 w-38 [--i:3] lg:hidden" /></div>
+          <div className="animate-rise [--i:4]">
+            <LoginForm
+              initialError={error === "inactive" ? "This account has been deactivated. Contact your administrator." : undefined}
+            />
+          </div>
+          <p className="animate-rise mt-8 text-sm text-muted-foreground [--i:5]">
+            Accounts are created by your administrator.
+          </p>
+        </div>
+      </section>
     </main>
   );
 }

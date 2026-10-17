@@ -1,0 +1,178 @@
+@import "tailwindcss";
+
+/*
+ * Salvus tokens. Structure from the "Serif" design system; colors sampled from
+ * the Salvus logo sheet (burnished gold replaced by the brand's espresso/taupe).
+ * Contrast on --background: foreground 10.8:1, muted-foreground 5.2:1,
+ * accent-foreground on accent 9.6:1, input border 3:1.
+ */
+:root {
+  --background: #eeeae1;
+  --foreground: #3a2f28;
+  --muted: #e0d7ce;
+  --muted-foreground: #6b5e52;
+  --accent: #4c3f37;
+  --accent-secondary: #72665a;
+  --accent-foreground: #fbf8f3;
+  --brand-taupe: #837262;
+  --border: #d5cbc0;
+  --border-hover: #b9ab9d;
+  --input: #9c8e80;
+  --card: #fbf9f5;
+  --ring: #4c3f37;
+  --destructive: #9a3b2b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-brand-taupe: var(--brand-taupe);
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+  --color-input: var(--input);
+  --color-card: var(--card);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+
+  --font-serif: var(--font-playfair), Georgia, serif;
+  --font-sans: var(--font-source-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --shadow-sm: 0 1px 2px rgb(58 47 40 / 0.04);
+  --shadow-md: 0 4px 12px rgb(58 47 40 / 0.06);
+  --shadow-lg: 0 8px 24px rgb(58 47 40 / 0.08);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+}
+
+/* Paper texture: fine noise over the whole page for a print-like feel. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.3;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.23 0 0 0 0 0.18 0 0 0 0 0.16 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Ambient glow: one large, barely-there warm circle behind everything. */
+body::after {
+  content: "";
+  position: fixed;
+  top: -20vmax;
+  right: -15vmax;
+  width: 60vmax;
+  height: 60vmax;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgb(131 114 98 / 0.08), transparent 70%);
+}
+
+@utility small-caps {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@utility animate-fade-in {
+  animation: fade-in 600ms ease-out both;
+}
+
+/* Staggered entrance: set --i on each part (e.g. [--i:2]) to queue it 70ms after the last. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@utility animate-rise {
+  animation: rise 560ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+/*
+ * Mobile sidebar: native <dialog> drawer from the left edge. Enters on the
+ * iOS drawer curve, leaves faster. allow-discrete keeps it painted while closing.
+ */
+.sidebar-drawer {
+  translate: -100% 0;
+  transition:
+    translate 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    display 200ms allow-discrete,
+    overlay 200ms allow-discrete;
+}
+
+.sidebar-drawer[open] {
+  translate: 0 0;
+  transition-duration: 320ms;
+  transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+
+  @starting-style {
+    translate: -100% 0;
+  }
+}
+
+.sidebar-drawer::backdrop {
+  background: rgb(58 47 40 / 0.32);
+  opacity: 0;
+  transition:
+    opacity 200ms ease,
+    display 200ms allow-discrete,
+    overlay 200ms allow-discrete;
+}
+
+.sidebar-drawer[open]::backdrop {
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+html:has(.sidebar-drawer[open]) {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+  }
+}

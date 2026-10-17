@@ -1,14 +1,15 @@
 import Image from "next/image";
-import { Fragment } from "react";
+import { Fragment, type ReactNode } from "react";
 import { SOCIAL_PLATFORMS } from "@/constants/social-platforms";
-import { WalletSymbol } from "@/components/brand/logo";
+import { Logo } from "@/components/brand/logo";
 import { Avatar } from "@/components/ui/avatar";
 import { buttonClasses } from "@/components/ui/button";
+import { MailIcon, PhoneIcon, SocialIcon } from "@/components/ui/icons";
 import { displayUrl, formatMobile, fullName, roleLine } from "@/lib/format";
 import { LOGO_BUCKET, PHOTO_BUCKET, publicImageUrl } from "@/lib/storage";
 import type { PublicWallet } from "@/types/wallet";
 
-function ContactRow({ label, href, value, external }: { label: string; href: string; value: string; external?: boolean }) {
+function ContactRow({ icon, label, href, value, external }: { icon: ReactNode; label: string; href: string; value: string; external?: boolean }) {
   return (
     <li className="border-b border-border">
       <a
@@ -16,7 +17,10 @@ function ContactRow({ label, href, value, external }: { label: string; href: str
         {...(external && { target: "_blank", rel: "noopener noreferrer" })}
         className="group -mx-3 flex min-h-16 items-center justify-between gap-4 rounded-md px-3 py-3 touch-manipulation transition-colors duration-150 ease-out hover:bg-card/70 active:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
-        <span className="min-w-0">
+        <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted text-accent">
+          {icon}
+        </span>
+        <span className="min-w-0 flex-1">
           <span className="small-caps block text-muted-foreground">{label}</span>
           <span className="block text-base leading-snug text-foreground [overflow-wrap:anywhere]">{value}</span>
         </span>
@@ -41,10 +45,7 @@ export function PublicProfile({ wallet, token }: { wallet: PublicWallet; token: 
   return (
     <main className="mx-auto w-full max-w-md flex-1 sm:px-4 sm:py-12">
       <header className="bg-accent px-6 pt-6 pb-8 text-accent-foreground sm:rounded-2xl sm:px-8">
-        <p className="flex items-center gap-2 text-accent-foreground/70 animate-rise">
-          <WalletSymbol className="size-6" />
-          <span className="font-serif text-sm tracking-[0.2em]">SALVUS</span>
-        </p>
+        <Logo horizontal tone="white" className="w-36 animate-rise" />
 
         <div className="mt-10 flex animate-rise [--i:1]">
           <Avatar
@@ -109,11 +110,12 @@ export function PublicProfile({ wallet, token }: { wallet: PublicWallet; token: 
           </h2>
           {hasContact ? (
             <ul className="mt-3 border-t border-border">
-              {wallet.email && <ContactRow label="Email" href={`mailto:${wallet.email}`} value={wallet.email} />}
-              {wallet.mobile && <ContactRow label="Mobile" href={`tel:${wallet.mobile}`} value={formatMobile(wallet.mobile)} />}
+              {wallet.email && <ContactRow icon={<MailIcon className="size-5" />} label="Email" href={`mailto:${wallet.email}`} value={wallet.email} />}
+              {wallet.mobile && <ContactRow icon={<PhoneIcon className="size-5" />} label="Mobile" href={`tel:${wallet.mobile}`} value={formatMobile(wallet.mobile)} />}
               {wallet.social_links.map((link) => (
                 <ContactRow
                   key={link.url}
+                  icon={<SocialIcon platform={link.platform} className="size-5" />}
                   label={SOCIAL_PLATFORMS[link.platform].label}
                   href={link.url}
                   value={displayUrl(link.url)}
